@@ -1,39 +1,61 @@
 package ro.ulbs.proiectaresoftware.students;
 
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class Application {
     public static void main(String[] args) {
 
-        Student s1 = new Student(112, "Ioan", "Popa", "TI21/1");
-        Student s2 = new Student(112, "Maria", "Oprea", "TI21/1");
-        Student s3 = new Student(120, "Alis", "Popa", "TI21/2");
-        Student s4 = new Student(122, "Mihai", "Vecerdea", "TI22/1");
-        Student s5 = new Student(122, "Eugen", "Uritescu", "TI22/2");
-        Student s6 = new Student(120, "Alis", "Popa", "TI21/2");
-        Student s7 = new Student(112, "Maria", "Popa", "TI21/1");
-        System.out.println("Numar Matricol Prenume Nume Formatie Studiu");
-        //System.out.println(s1);
-        //System.out.println(s2);
-        //System.out.println(s3);
-        //System.out.println(s4);
-        //System.out.println(s5);
+        Path inputFile = Paths.get("C:\\Users\\raulc\\IdeaProjects\\Students\\src\\main\\java\\ro\\ulbs\\proiectaresoftware\\students\\studenti_in.txt");
+        Path outputFile = Paths.get("C:\\Users\\raulc\\IdeaProjects\\Students\\src\\main\\java\\ro\\ulbs\\proiectaresoftware\\students\\studenti_out.txt");
+        List<Student> students = citireStudenti(inputFile);
+        System.out.println("--- Studentii din fișier ---");
+        for (Student s : students) {
+            System.out.println(s);
+        }
+        students.sort(Comparator.comparing(Student::getNume));
+        scriereStudenti(students, outputFile);
+    }
 
-        Set<Student> students = new HashSet<>();
-        students.add(s1);
-        students.add(s2);
-        students.add(s3);
-        students.add(s4);
-        students.add(s5);
-        students.forEach(System.out::println);
+    private static void scriereStudenti(List<Student> students, Path outputFile) {
+        try (BufferedWriter writer = Files.newBufferedWriter(outputFile)) {
+            for (Student s : students) {
+                writer.write(s.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Eroare la scriere: " + e.getMessage());
+        }
+    }
 
-        System.out.println(Exista(s6,students));
-        System.out.println(Exista(s7,students));
+    public static List<Student> citireStudenti(Path path) {
+        List<Student> listaStudenti = new ArrayList<>();
+        try {
+            List<String> linii = Files.readAllLines(path);
+            for (String linie : linii) {
+                String[] date = linie.split(",");
 
+                if (date.length == 4) {
+                    int numarMatricol = Integer.parseInt(date[0].trim());
+                    String prenume = date[1].trim();
+                    String nume = date[2].trim();
+                    String formatie = date[3].trim();
+
+                    listaStudenti.add(new Student(numarMatricol, prenume, nume, formatie));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Eroare la citire: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Eroare la conversie : " + e.getMessage());
+        }
+
+        return listaStudenti;
     }
 
     public static boolean Exista(Student student, Set<Student> students) {
