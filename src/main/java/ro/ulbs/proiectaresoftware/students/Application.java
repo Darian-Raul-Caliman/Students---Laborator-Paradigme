@@ -13,6 +13,7 @@ public class Application {
 
         Path inputFile = Paths.get("C:\\Users\\raulc\\IdeaProjects\\Students\\src\\main\\java\\ro\\ulbs\\proiectaresoftware\\students\\studenti_in.txt");
         Path outputFile = Paths.get("C:\\Users\\raulc\\IdeaProjects\\Students\\src\\main\\java\\ro\\ulbs\\proiectaresoftware\\students\\studenti_out.txt");
+        Path outputFile2 = Paths.get("C:\\Users\\raulc\\IdeaProjects\\Students\\src\\main\\java\\ro\\ulbs\\proiectaresoftware\\students\\studenti_out_sorted.txt");
         List<Student> students = citireStudenti(inputFile);
         System.out.println("--- Studentii din fișier ---");
         for (Student s : students) {
@@ -20,6 +21,12 @@ public class Application {
         }
         students.sort(Comparator.comparing(Student::getNume));
         scriereStudenti(students, outputFile);
+
+        students.sort(
+                Comparator.comparing(Student::getFormațieDeStudiu)
+                        .thenComparing(Student::getNume)
+        );
+        scriereStudenti(students, outputFile2);
     }
 
     private static void scriereStudenti(List<Student> students, Path outputFile) {

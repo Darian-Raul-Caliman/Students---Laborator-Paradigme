@@ -1,0 +1,6 @@
+1024            Mihalcea    Ioan ISM141/1
+1025            Popa    Andrei ISM141/2
+1026            Prodan    Anamaria TI131/1
+1026            Popescu    Bianca TI131/2
+1027            Mohanu    Paul TI132/1
+1028            Ionescu    Mihai TI132/2
