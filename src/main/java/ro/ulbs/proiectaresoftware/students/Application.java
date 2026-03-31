@@ -1,6 +1,5 @@
 package ro.ulbs.proiectaresoftware.students;
 
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,14 +10,17 @@ import java.util.*;
 public class Application {
     public static void main(String[] args) {
 
-        Path inputFile = Paths.get("C:\\Users\\raulc\\IdeaProjects\\Students\\src\\main\\java\\ro\\ulbs\\proiectaresoftware\\students\\studenti_in.txt");
-        Path outputFile = Paths.get("C:\\Users\\raulc\\IdeaProjects\\Students\\src\\main\\java\\ro\\ulbs\\proiectaresoftware\\students\\studenti_out.txt");
-        Path outputFile2 = Paths.get("C:\\Users\\raulc\\IdeaProjects\\Students\\src\\main\\java\\ro\\ulbs\\proiectaresoftware\\students\\studenti_out_sorted.txt");
+        Path inputFile = Paths.get("src/main/java/ro/ulbs/proiectaresoftware/students/studenti_in.txt");
+        Path outputFile = Paths.get("studenti_out.txt");
+        Path outputFile2 = Paths.get("studenti_out_sorted.txt");
+        Path note = Paths.get("C:\\Users\\raulc\\IdeaProjects\\Students\\src\\main\\java\\ro\\ulbs\\proiectaresoftware\\students\\note_anon.txt");
+
         List<Student> students = citireStudenti(inputFile);
-        System.out.println("--- Studentii din fișier ---");
+        System.out.println("--- Studentii din fisier ---");
         for (Student s : students) {
             System.out.println(s);
         }
+
         students.sort(Comparator.comparing(Student::getNume));
         scriereStudenti(students, outputFile);
 
@@ -27,9 +29,31 @@ public class Application {
                         .thenComparing(Student::getNume)
         );
         scriereStudenti(students, outputFile2);
+        noteStudenti(students, note);
+
+        Map<String, Student> tineri = new HashMap<>();
+        for (Student s : students) {
+            tineri.put(s.getPrenume() + " " + s.getNume(), s);
+        }
+
+        float notaM = gasesteNota("Bianca", "Popescu", tineri);
+        float notaN = gasesteNota("Ioan", "Popa", tineri);
+
+        System.out.println("Nota Bianca Popescu: " + notaM);
+        System.out.println("Nota Ioan Popa: " + notaN);
     }
 
-    private static void scriereStudenti(List<Student> students, Path outputFile) {
+    public static float gasesteNota(String prenume, String nume, Map<String, Student> mapa) {
+        String cheie = prenume + " " + nume;
+        Student studentGasit = mapa.get(cheie);
+
+        if (studentGasit != null) {
+            return studentGasit.nota;
+        }
+        return 0.0f;
+    }
+
+    public static void scriereStudenti(List<Student> students, Path outputFile) {
         try (BufferedWriter writer = Files.newBufferedWriter(outputFile)) {
             for (Student s : students) {
                 writer.write(s.toString());
@@ -40,8 +64,43 @@ public class Application {
         }
     }
 
+    public static void noteStudenti(List<Student> students, Path path) {
+        Map<Integer, Student> mapaStudenti = new HashMap<>();
+        for (Student s : students) {
+            mapaStudenti.put(s.getNumarMatricol(), s);
+        }
+
+        try {
+            List<String> linii = Files.readAllLines(path);
+
+            for (String linie : linii) {
+                if (linie.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] date = linie.split(",");
+
+                if (date.length == 2) {
+                    try {
+                        int numarMatricol = Integer.parseInt(date[0].trim());
+                        float nota = Float.parseFloat(date[1].trim());
+
+                        Student studentGasit = mapaStudenti.get(numarMatricol);
+                        if (studentGasit != null) {
+                            studentGasit.setNota(nota);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Eroare conversie număr pe linia: [" + linie + "]");
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Nu am putut găsi/citi fișierul la calea: " + path.toAbsolutePath());
+        }
+    }
+
     public static List<Student> citireStudenti(Path path) {
-        List<Student> listaStudenti = new ArrayList<>();
+        List<Student> listaStudenti = new LinkedList<>();
         try {
             List<String> linii = Files.readAllLines(path);
             for (String linie : linii) {
@@ -69,4 +128,3 @@ public class Application {
         return students.contains(student);
     }
 }
-
