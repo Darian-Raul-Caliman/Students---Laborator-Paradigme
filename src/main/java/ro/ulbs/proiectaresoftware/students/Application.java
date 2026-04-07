@@ -17,6 +17,7 @@ public class Application {
 
         List<Student> students = citireStudenti(inputFile);
         System.out.println("--- Studentii din fisier ---");
+
         for (Student s : students) {
             System.out.println(s);
         }
@@ -35,12 +36,23 @@ public class Application {
         for (Student s : students) {
             tineri.put(s.getPrenume() + " " + s.getNume(), s);
         }
-
         float notaM = gasesteNota("Bianca", "Popescu", tineri);
         float notaN = gasesteNota("Ioan", "Popa", tineri);
 
         System.out.println("Nota Bianca Popescu: " + notaM);
         System.out.println("Nota Ioan Popa: " + notaN);
+
+        System.out.println("\n--- Salvare studentilor bursieri ---");
+        List<StudentBursier> bursieri = new ArrayList<>();
+        bursieri.add(new StudentBursier(1025, "Andrei", "Popa", "ISM141/2", 8.70, 725.50));
+        bursieri.add(new StudentBursier(1024, "Ioan", "Mihalcea", "ISM141/1", 9.80, 801.10));
+        bursieri.add(new StudentBursier(1026, "Anamaria", "Prodan", "TI131/1", 8.90, 745.50));
+        bursieri.add(new StudentBursier(1029, "Bianca", "Popescu", "TI131/1", 9.10, 780.80));
+
+        Path caleBursieriOut = Paths.get("bursieri_out.txt");
+
+        scriereStudenti(bursieri, caleBursieriOut);
+        System.out.println("Studentii bursieri au fost salvati in: " + caleBursieriOut.getFileName());
     }
 
     public static float gasesteNota(String prenume, String nume, Map<String, Student> mapa) {
@@ -53,9 +65,10 @@ public class Application {
         return 0.0f;
     }
 
-    public static void scriereStudenti(List<Student> students, Path outputFile) {
+    public static void scriereStudenti(List<? extends Student> students, Path outputFile) {
         try (BufferedWriter writer = Files.newBufferedWriter(outputFile)) {
             for (Student s : students) {
+
                 writer.write(s.toString());
                 writer.newLine();
             }
