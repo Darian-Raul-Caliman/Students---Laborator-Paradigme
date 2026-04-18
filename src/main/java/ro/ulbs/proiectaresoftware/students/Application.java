@@ -9,21 +9,20 @@ import java.util.*;
 
 public class Application {
     public static void main(String[] args) {
-
         Path inputFile = Paths.get("src/main/java/ro/ulbs/proiectaresoftware/students/studenti_in.txt");
         Path outputFile = Paths.get("studenti_out.txt");
         Path outputFile2 = Paths.get("studenti_out_sorted.txt");
         Path note = Paths.get("C:\\Users\\raulc\\IdeaProjects\\Students\\src\\main\\java\\ro\\ulbs\\proiectaresoftware\\students\\note_anon.txt");
-
         List<Student> students = citireStudenti(inputFile);
         System.out.println("--- Studentii din fisier ---");
-
         for (Student s : students) {
             System.out.println(s);
         }
 
         students.sort(Comparator.comparing(Student::getNume));
         scriereStudenti(students, outputFile);
+
+
 
         students.sort(
                 Comparator.comparing(Student::getFormațieDeStudiu)
@@ -43,7 +42,7 @@ public class Application {
         System.out.println("Nota Ioan Popa: " + notaN);
 
         System.out.println("\n--- Salvare studentilor bursieri ---");
-        List<StudentBursier> bursieri = new ArrayList<>();
+        List<Student> bursieri = new ArrayList<>();
         bursieri.add(new StudentBursier(1025, "Andrei", "Popa", "ISM141/2", 8.70, 725.50));
         bursieri.add(new StudentBursier(1024, "Ioan", "Mihalcea", "ISM141/1", 9.80, 801.10));
         bursieri.add(new StudentBursier(1026, "Anamaria", "Prodan", "TI131/1", 8.90, 745.50));
@@ -137,6 +136,7 @@ public class Application {
         return listaStudenti;
     }
 
+    
     public static boolean Exista(Student student, Set<Student> students) {
         return students.contains(student);
     }

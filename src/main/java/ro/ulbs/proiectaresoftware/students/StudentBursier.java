@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class StudentBursier extends Student {
 
-    private double cuantumBursa;
+    double cuantumBursa;
 
     public StudentBursier(int numarMatricol, String prenume, String nume, String formațieDeStudiu, double nota, double cuantumBursa) {
         super(numarMatricol, prenume, nume, formațieDeStudiu);
@@ -40,4 +40,6 @@ public class StudentBursier extends Student {
     public String toString() {
         return super.toString() + "    Bursa: " + cuantumBursa;
     }
+
+
 }
