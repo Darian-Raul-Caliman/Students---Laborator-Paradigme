@@ -1,0 +1,4 @@
+1025            Popa    Andrei ISM141/2 8.7    Bursa: 725.5
+1024            Mihalcea    Ioan ISM141/1 9.8    Bursa: 801.1
+1026            Prodan    Anamaria TI131/1 8.9    Bursa: 745.5
+1029            Popescu    Bianca TI131/1 9.1    Bursa: 780.8

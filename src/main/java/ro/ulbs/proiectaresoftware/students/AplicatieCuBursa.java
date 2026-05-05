@@ -28,13 +28,12 @@ public class AplicatieCuBursa {
     }
     public List<StudentBursier> sorteaza(List<StudentBursier> lst) {
         lst.sort(
-                Comparator.comparing(StudentBursier::getFormațieDeStudiu)
+                Comparator.comparing(StudentBursier::getFormatieDeStudiu)
                         .thenComparing(StudentBursier::getNume)
                         .thenComparing(StudentBursier::getPrenume)
-                        .thenComparingDouble(s -> s.nota)
+                        .thenComparingDouble(StudentBursier::getNota)
                         .thenComparingDouble(StudentBursier::getCuantumBursa)
         );
-
         return lst;
     }
 }
