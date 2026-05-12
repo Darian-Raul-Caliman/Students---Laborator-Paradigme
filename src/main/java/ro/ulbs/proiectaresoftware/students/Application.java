@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Application {
     public static void main(String[] args) {
@@ -52,6 +53,44 @@ public class Application {
         List<Student> listaImportata = importaDinExcel(excelPath);
         System.out.println("\n--- Studenți importați din Excel ---");
         listaImportata.forEach(System.out::println);
+
+
+
+        List<Student> studentiCuNote = Arrays.asList(
+                new Student(1025, "Andrei", "Popa", "ISM141/2", 8.70f),
+                new Student(1024, "Ioan", "Mihalcea", "ISM141/1", 10.0f),
+                new Student(1026, "Anamaria", "Prodan", "TI131/1", 8.90f),
+                new Student(1029, "Bianca", "Popescu", "TI131/1", 10.0f),
+                new Student(1029, "Maria", "Pana", "TI131/2", 4.10f),
+                new Student(1029, "Gabriela", "Mohanu", "TI131/2", 7.33f),
+                new Student(1029, "Marius", "Nasta", "TI131/2", 3.20f),
+                new Student(1029, "Marius", "Nasta", "TI131/1", 5.12f),
+                new Student(1029, "Andrei", "Dobrescu", "TI131/2", 2.22f)
+        );
+
+        System.out.println("\n--- a) Studenții cu nota 10 ---");
+        studentiCuNote.stream()
+                .filter(s -> s.getNota() == 10.0f)
+                .forEach(System.out::println);
+
+        System.out.println("\n--- b) Studenții cu nota sub 5 ---");
+        studentiCuNote.stream()
+                .filter(s -> s.getNota() < 5.0f)
+                .forEach(System.out::println);
+
+        System.out.println("\n--- c) Studenți cu nota < 4 modificată în 4 ---");
+        List<Student> listaTransformata = studentiCuNote.stream()
+                .map(s -> s.getNota() < 4.0f ? s.updateNota(4.0f) : s)
+                .collect(Collectors.toList());
+        listaTransformata.forEach(System.out::println);
+
+        float sumaNote = studentiCuNote.stream()
+                .map(Student::getNota)
+                .reduce(0.0f, Float::sum);
+        System.out.println("\n--- d) Suma notelor: " + sumaNote + " ---");
+
+        float media = sumaNote / studentiCuNote.size();
+        System.out.println("--- e) Media notelor: " + media + " ---");
     }
 
 
@@ -146,4 +185,7 @@ public class Application {
             System.out.println("Eroare la scriere: " + e.getMessage());
         }
     }
+
+
+
 }
