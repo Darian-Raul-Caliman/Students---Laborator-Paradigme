@@ -76,7 +76,7 @@ public class Application {
         System.out.println("\n--- b) Studenții cu nota sub 5 ---");
         studentiCuNote.stream()
                 .filter(s -> s.getNota() < 5.0f)
-                .forEach(System.out::println);
+                .forEach(s -> s.getNota());
 
         System.out.println("\n--- c) Studenți cu nota < 4 modificată în 4 ---");
         List<Student> listaTransformata = studentiCuNote.stream()
